@@ -22,4 +22,4 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - run: sleep ${RANDOM::2}
+      - run: sleep $(( ${RANDOM::1} * 30 ))
