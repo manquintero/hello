@@ -1,12 +1,16 @@
 on:
   workflow_call:
     inputs:
-      PUBLISH_ARTIFACT:
-        description: Whether to publish the built artifact(s) as well, for example Java JARs
+      INPUT_1:
+        description:
         type: boolean
         required: false
         default: false
-
+      INPUT_2:
+        description:
+        type: boolean
+        required: false
+        default: false
 jobs:
     build:
       strategy:
@@ -23,8 +27,12 @@ jobs:
 
         - run: |
             echo "my-var=${{ steps.generate.outputs.my-var }}"
-            echo "PUBLISH_ARTIFACT=${{ inputs.PUBLISH_ARTIFACT }}"
+            echo "INPUT_1=${{ inputs.INPUT_1 }}"
 
-        - name: Shall I run?
-          if: inputs.PUBLISH_ARTIFACT && steps.generate.outputs.my-var != 'true'
+        - name: Build
+          if: (inputs.INPUT_1 || inputs.INPUT_2) && steps.generate.outputs.my-var != 'true'
+          run: date
+
+        - name: Publish
+          if: inputs.INPUT_1 && steps.generate.outputs.my-var != 'true'
           run: date

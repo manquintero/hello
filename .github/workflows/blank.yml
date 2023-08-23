@@ -12,7 +12,9 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        publish: [true, false]
+        input1: [true, false]
+        input2: [true, false]
     uses: ./.github/workflows/reusable.yaml
     with:
-      PUBLISH_ARTIFACT: ${{ matrix.publish }}
+      INPUT_1: ${{ matrix.input1 }}
+      INPUT_2: ${{ matrix.input2 }}
