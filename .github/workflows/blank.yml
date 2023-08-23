@@ -9,6 +9,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - run: date
+    strategy:
+      max-parallel: 1
+      matrix:
+        publish: [true, false]
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      PUBLISH_ARTIFACT: ${{ matrix.publish }}

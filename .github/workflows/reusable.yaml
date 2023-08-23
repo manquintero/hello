@@ -1,0 +1,30 @@
+on:
+  workflow_call:
+    inputs:
+      PUBLISH_ARTIFACT:
+        description: Whether to publish the built artifact(s) as well, for example Java JARs
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+    build:
+      strategy:
+        max-parallel: 1
+        matrix:
+          result: ['true', 'false']
+
+      runs-on: ubuntu-latest
+      steps:
+        - name: Generate Outputs
+          id: generate
+          run: |
+            echo "my-var=${{ matrix.result }}" | tee -a "${GITHUB_OUTPUT}"
+
+        - run: |
+            echo "my-var=${{ steps.generate.outputs.my-var }}"
+            echo "PUBLISH_ARTIFACT=${{ inputs.PUBLISH_ARTIFACT }}"
+
+        - name: Shall I run?
+          if: inputs.PUBLISH_ARTIFACT && steps.generate.outputs.my-var != 'true'
+          run: date
