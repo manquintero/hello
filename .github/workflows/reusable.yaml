@@ -14,7 +14,6 @@ on:
 jobs:
     build:
       strategy:
-        max-parallel: 1
         matrix:
           result: ['true', 'false']
 
@@ -22,17 +21,11 @@ jobs:
       steps:
         - name: Generate Outputs
           id: generate
-          run: |
-            echo "my-var=${{ matrix.result }}" | tee -a "${GITHUB_OUTPUT}"
-
-        - run: |
-            echo "my-var=${{ steps.generate.outputs.my-var }}"
-            echo "INPUT_1=${{ inputs.INPUT_1 }}"
-
+          run: echo "my-var=${{ matrix.result }}" | tee -a "${GITHUB_OUTPUT}"
+        - run: echo "my-var=${{ steps.generate.outputs.my-var }} INPUT_1=${{ inputs.INPUT_1 }} INPUT_2=${{ inputs.INPUT_2 }}"
         - name: Build
           if: (inputs.INPUT_1 || inputs.INPUT_2) && steps.generate.outputs.my-var != 'true'
           run: date
-
         - name: Publish
           if: inputs.INPUT_1 && steps.generate.outputs.my-var != 'true'
           run: date

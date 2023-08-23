@@ -10,7 +10,6 @@ on:
 jobs:
   build:
     strategy:
-      max-parallel: 1
       matrix:
         input1: [true, false]
         input2: [true, false]
