@@ -8,12 +8,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        input1: [true, false]
-        input2: [true, false]
-    uses: ./.github/workflows/reusable.yaml
-    with:
-      INPUT_1: ${{ matrix.input1 }}
-      INPUT_2: ${{ matrix.input2 }}
+  example:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          # submodules: recursive
+
+      - name: Generate version tag
+        id: generate-tag
+        uses: mathieudutour/github-tag-action@fcfbdceb3093f6d85a3b194740f8c6cec632f4e2 # commit SHA for tag v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: true
+          fetch_all_tags: true
+
+      - name: Print New Version
+        run: |
+          echo "version='${{ steps.generate-tag.outputs.new_version }}'"
+
+      # - name: Prepare Jira Comment
+      #   id: prepare-jira
+      #   uses: actions/github-script@v6
+      #   env:
+      #     REPOSITORY: ${{ github.repository }}
+      #     SHA: ${{ github.sha }}
+      #     VERSION_TAG: 0.0.10
+      #   with:
+      #     # debug: true
+      #     script: |
+      #       const { REPOSITORY, SHA, VERSION_TAG} = process.env
+
+      #       // Unpack
+      #       const [owner, repo] = REPOSITORY.split('/')
+
+      #       const {data: commit} = await github.rest.git.getCommit({
+      #         owner,
+      #         repo,
+      #         commit_sha: "c6c5fc4e7cbfca60877108e1f8fbb46cd1b56432",
+      #       });
+
+      #       return commit.message
+
+      #     # // const release = await github.rest.repos.getReleaseByTag({
+      #     # try {
+      #     #   const {status: code, data: release} = await github.rest.repos.getReleaseByTag({
+      #     #     owner,
+      #     #     repo,
+      #     #     tag: VERSION_TAG,
+      #     #   })
+      #     # } catch (err) {
+      #     #   core.info(`There's no release linked to ${VERSION_TAG} tag`)
+      #     # }
+      #     # return release.html_url
