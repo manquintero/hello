@@ -46,7 +46,7 @@ jobs:
 
             // https://api.github.com/repos/hello/actions/runs/6712384947/jobs
             // try {
-              const {data: reponse}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+              const {data: response}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner,
                 repo,
                 run_id: context.runId,
