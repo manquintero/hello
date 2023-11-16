@@ -1,31 +1,42 @@
 on:
   workflow_call:
-    inputs:
-      INPUT_1:
-        description:
-        type: boolean
-        required: false
-        default: false
-      INPUT_2:
-        description:
-        type: boolean
-        required: false
-        default: false
 jobs:
-    build:
-      strategy:
-        matrix:
-          result: ['true', 'false']
+  send-deploy-events:
+    strategy:
+      matrix:
+        difference: [1, 2]
 
-      runs-on: ubuntu-latest
-      steps:
-        - name: Generate Outputs
-          id: generate
-          run: echo "my-var=${{ matrix.result }}" | tee -a "${GITHUB_OUTPUT}"
-        - run: echo "my-var=${{ steps.generate.outputs.my-var }} INPUT_1=${{ inputs.INPUT_1 }} INPUT_2=${{ inputs.INPUT_2 }}"
-        - name: Build
-          if: (inputs.INPUT_1 || inputs.INPUT_2) && steps.generate.outputs.my-var != 'true'
-          run: date
-        - name: Publish
-          if: inputs.INPUT_1 && steps.generate.outputs.my-var != 'true'
-          run: date
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare Jira Comment
+        id: prepare-jira
+        uses: actions/github-script@v6
+        env:
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        with:
+          debug: true
+          script: |
+            const { REPOSITORY, SHA } = process.env
+
+            // Unpack owner, repo and commit
+            const [owner, repo] = REPOSITORY.split('/')
+
+            // Retrieve Run URL
+
+            // https://api.github.com/repos/hello/actions/runs/6712384947/jobs
+            // try {
+              const {data: response}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+                owner,
+                repo,
+                run_id: context.runId,
+              })
+              core.info(context.job)
+              core.info(JSON.stringify(response,null,2))
+              // const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
+              // const jobRunUrl = jobRun.html_url
+              // core.warning(jobRunUrl)
+            // } catch (err) {
+              // core.warning(`Unable retrieve a workflow run with run ID: ${context.runId}`)
+              // return
+            // }
