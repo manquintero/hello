@@ -8,57 +8,59 @@ on:
   workflow_dispatch:
 
 jobs:
-  example:
+  example-1:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
+      # - uses: actions/checkout@v4
+      #   with:
+      #     ref: ${{ github.sha }}
           # submodules: recursive
 
-      - name: Generate version tag
-        id: generate-tag
-        uses: mathieudutour/github-tag-action@fcfbdceb3093f6d85a3b194740f8c6cec632f4e2 # commit SHA for tag v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          dry_run: true
-          fetch_all_tags: true
-
-      - name: Print New Version
-        run: |
-          echo "version='${{ steps.generate-tag.outputs.new_version }}'"
-
-      # - name: Prepare Jira Comment
-      #   id: prepare-jira
-      #   uses: actions/github-script@v6
-      #   env:
-      #     REPOSITORY: ${{ github.repository }}
-      #     SHA: ${{ github.sha }}
-      #     VERSION_TAG: 0.0.10
+      # - name: Generate version tag
+      #   id: generate-tag
+      #   uses: mathieudutour/github-tag-action@fcfbdceb3093f6d85a3b194740f8c6cec632f4e2 # commit SHA for tag v6.1
       #   with:
-      #     # debug: true
-      #     script: |
-      #       const { REPOSITORY, SHA, VERSION_TAG} = process.env
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     dry_run: true
+      #     fetch_all_tags: true
 
-      #       // Unpack
-      #       const [owner, repo] = REPOSITORY.split('/')
+      # - name: Print New Version
+      #   run: |
+      #     echo "version='${{ steps.generate-tag.outputs.new_version }}'"
 
-      #       const {data: commit} = await github.rest.git.getCommit({
-      #         owner,
-      #         repo,
-      #         commit_sha: "c6c5fc4e7cbfca60877108e1f8fbb46cd1b56432",
-      #       });
+      - name: Prepare Jira Comment
+        id: prepare-jira
+        uses: actions/github-script@v6
+        env:
+          REPOSITORY: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          VERSION_TAG: 0.0.10
+        with:
+          debug: true
+          script: |
+            const { REPOSITORY, SHA, VERSION_TAG} = process.env
 
-      #       return commit.message
+            // Unpack owner, repo and commit
+            const [owner, repo] = REPOSITORY.split('/')
 
-      #     # // const release = await github.rest.repos.getReleaseByTag({
-      #     # try {
-      #     #   const {status: code, data: release} = await github.rest.repos.getReleaseByTag({
-      #     #     owner,
-      #     #     repo,
-      #     #     tag: VERSION_TAG,
-      #     #   })
-      #     # } catch (err) {
-      #     #   core.info(`There's no release linked to ${VERSION_TAG} tag`)
-      #     # }
-      #     # return release.html_url
+            // Retrieve Run URL
+
+            // https://api.github.com/repos/hello/actions/runs/6712384947/jobs
+            try {
+              const {data: reponse}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+                owner,
+                repo,
+                run_id: 6712384947,
+              })
+              const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
+              const jobRunUrl = jobRun.html_url
+              core.warning(jobRunUrl)
+            } catch (err) {
+              core.warning(`Unable retrieve a workflow run with run ID: ${context.runId}`)
+              return
+            }
+
+  example-2:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.job }}
