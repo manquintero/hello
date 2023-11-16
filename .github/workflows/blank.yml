@@ -45,20 +45,21 @@ jobs:
             // Retrieve Run URL
 
             // https://api.github.com/repos/hello/actions/runs/6712384947/jobs
-            try {
+            // try {
               const {data: reponse}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner,
                 repo,
                 run_id: context.runId,
               })
               core.info(context.job)
-              const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
-              const jobRunUrl = jobRun.html_url
-              core.warning(jobRunUrl)
-            } catch (err) {
-              core.warning(`Unable retrieve a workflow run with run ID: ${context.runId}`)
-              return
-            }
+              core.info(JSON.stringify(response,null,2))
+              # const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
+              # const jobRunUrl = jobRun.html_url
+              # core.warning(jobRunUrl)
+            // } catch (err) {
+              // core.warning(`Unable retrieve a workflow run with run ID: ${context.runId}`)
+              // return
+            // }
 
   example-2:
     runs-on: ubuntu-latest
