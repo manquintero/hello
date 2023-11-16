@@ -53,9 +53,9 @@ jobs:
               })
               core.info(context.job)
               core.info(JSON.stringify(response,null,2))
-              # const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
-              # const jobRunUrl = jobRun.html_url
-              # core.warning(jobRunUrl)
+              // const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
+              // const jobRunUrl = jobRun.html_url
+              // core.warning(jobRunUrl)
             // } catch (err) {
               // core.warning(`Unable retrieve a workflow run with run ID: ${context.runId}`)
               // return
