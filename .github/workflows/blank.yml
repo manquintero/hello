@@ -34,7 +34,6 @@ jobs:
         env:
           REPOSITORY: ${{ github.repository }}
           SHA: ${{ github.sha }}
-          VERSION_TAG: 0.0.10
         with:
           debug: true
           script: |
@@ -50,8 +49,9 @@ jobs:
               const {data: reponse}  = await github.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
                 owner,
                 repo,
-                run_id: 6712384947,
+                run_id: context.runId,
               })
+              core.info(context.job)
               const jobRun = reponse.jobs.filter((job) => job.id == context.job).pop()
               const jobRunUrl = jobRun.html_url
               core.warning(jobRunUrl)
