@@ -16,4 +16,4 @@ jobs:
         env:
           URL: 'https://github.com/${{ github.repository_owner}}/hello/actions/runs/123'
         with:
-          script: 'core.notice(`Triggered job: ${process.env.URL`)'
+          script: 'core.notice(`Triggered job: ${process.env.URL}`)'
