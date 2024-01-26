@@ -10,10 +10,16 @@ on:
 jobs:
   example:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        microservice: [uno, dos, tres, cuatro]
     steps:
+      - run: set -x; sleep ${RANDOM:1:1}
       - name: Expose URL
         uses: actions/github-script@v7
         env:
+          MICROSERVICE: ${{ matrix.microservice }}
           URL: 'https://github.com/${{ github.repository_owner}}/hello/actions/runs/123'
         with:
-          script: 'core.notice(`Triggered job: ${process.env.URL}`)'
+          script: 'core.notice(`${process.env.MICROSERVICE} Triggered job: ${process.env.URL}`)'
+      - run: set -x; sleep ${RANDOM:1:1}
