@@ -9,4 +9,11 @@ on:
 
 jobs:
   example:
-    uses: ./.github/workflows/reusable.yaml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Expose URL
+        uses: actions/github-script@v7
+        env:
+          URL: 'https://github.com/${{ github.repository_owner}}/hello/actions/runs/123'
+        with:
+          script: 'core.notice(`Triggered job: ${process.env.URL`)'
