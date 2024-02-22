@@ -19,8 +19,6 @@ jobs:
 
       - name: Display
         run: |
-          echo ${SONAR_TOKEN}
-          echo ${SONARQUBE_TOKEN}
+          echo SONAR_TOKEN=${SONAR_TOKEN}
         env:
-          SONAR_TOKEN: ${{ steps.generate-secrets.outputs.key }}
-          SONARQUBE_TOKEN: ${{steps.generate-secrets.outputs.value }}
+          ${{ steps.generate-secrets.outputs.key }}: ${{steps.generate-secrets.outputs.value }}
