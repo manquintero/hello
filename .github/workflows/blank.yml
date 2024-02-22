@@ -11,8 +11,16 @@ jobs:
   example:
     runs-on: ubuntu-latest
     steps:
-      - name: Expose URL
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.info(JSON.stringify(context.serverUrl))
+      - name: Generate Secrets
+        id: generate-secrets
+        run: |
+          echo "SONAR_TOKEN=secreto1" | tee -a $GITHUB_OUTPUT
+          echo "SONARQUBE_TOKEN=secreto2" | tee -a $GITHUB_OUTPUT
+
+      - name: Display
+        run: |
+          echo ${SONAR_TOKEN}
+          echo ${SONARQUBE_TOKEN}
+        env:
+          SONAR_TOKEN: ${steps.generate-secrets.outputs.SONAR_TOKEN}
+          SONARQUBE_TOKEN: ${steps.generate-secrets.outputs.SONARQUBE_TOKEN}
