@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-shopt
+echo "Hello World"
