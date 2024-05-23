@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: run.sh
+      - run: ./run.sh
 
   example-defaults:
     runs-on: ubuntu-latest
@@ -21,7 +21,7 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v4
-      - run: run.sh
+      - run: ./run.sh
 
   pr-ready:
     runs-on: ubuntu-latest
