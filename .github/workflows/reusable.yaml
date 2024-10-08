@@ -1,0 +1,22 @@
+on:
+  workflow_call:
+    inputs:
+      MY_BOOLEAN:
+        type: boolean
+        required: false
+        description: Testing a boolean
+
+jobs:
+  coso-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: See (${{ inputs.MY_BOOLEAN }})
+        run: echo "${{ inputs.MY_BOOLEAN }}"
+
+      - name: If $ {{ inputs.MY_BOOLEAN }}
+        if: inputs.MY_BOOLEAN
+        run: echo {{ inputs.MY_BOOLEAN }}
+
+      - name: If $ {{ inputs.MY_BOOLEAN }} == true
+        if: inputs.MY_BOOLEAN == true
+        run: echo {{ inputs.MY_BOOLEAN }}

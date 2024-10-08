@@ -8,33 +8,15 @@ on:
   workflow_dispatch:
 
 jobs:
-  example:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: ./run.sh
+  call-1:
+    uses: ./.github/workflows/reusable.yaml
 
-  example-defaults:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-    steps:
-      - uses: actions/checkout@v4
-      - run: ./run.sh
+  call-2:
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      MY_BOOLEAN: true
 
-  pr-ready:
-    runs-on: ubuntu-latest
-    if: always()
-    needs:
-      - example
-      - example-defaults
-    steps:
-      - name: Emit overall result of workflow
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const results = ${{ toJSON(needs.*.result) }}
-            if (!results.every(result => result == 'success' || result == 'skipped')) {
-              core.setFailed('Failed mandatory checks found')
-            }
+  call-3:
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      MY_BOOLEAN: false
