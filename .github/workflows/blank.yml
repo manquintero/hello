@@ -1,4 +1,5 @@
 name: CI
+run-name: "Publish ${{ github.event_name == 'workflow_dispatch' && 'Alpha' }} Helm Charts"
 
 on:
   push:
@@ -8,15 +9,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-1:
-    uses: ./.github/workflows/reusable.yaml
+  coso:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo Hello
 
-  call-2:
-    uses: ./.github/workflows/reusable.yaml
-    with:
-      MY_BOOLEAN: true
+  # call-1:
+  #   uses: ./.github/workflows/reusable.yaml
 
-  call-3:
-    uses: ./.github/workflows/reusable.yaml
-    with:
-      MY_BOOLEAN: false
+  # call-2:
+  #   uses: ./.github/workflows/reusable.yaml
+  #   with:
+  #     MY_BOOLEAN: true
+
+  # call-3:
+  #   uses: ./.github/workflows/reusable.yaml
+  #   with:
+  #     MY_BOOLEAN: false
