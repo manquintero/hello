@@ -1,5 +1,5 @@
 name: CI
-run-name: "Publish ${{ github.event_name == 'workflow_dispatch' && 'Alpha' || '' }} Helm Charts"
+run-name: "Hello World ${{ github.event.client_payload.deployment.run_name_detail }}"
 
 on:
   push:
