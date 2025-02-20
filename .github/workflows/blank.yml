@@ -1,5 +1,5 @@
 name: CI
-run-name: "Hello World ${{ github.event.client_payload.deployment.run_name_detail }}"
+run-name: "Hello ${{ github.event.client_payload.run_name_detail }} World"
 
 on:
   push:
