@@ -12,7 +12,11 @@ jobs:
   coso:
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello
+      - run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /rate_limit
 
   # call-1:
   #   uses: ./.github/workflows/reusable.yaml
